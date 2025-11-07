@@ -45,6 +45,7 @@ function displayFood(products) {
   });
 }
 
+
 function populateSidebar(categories) {
   categoryList.innerHTML = "";
   categories.forEach((cat) => {
@@ -60,6 +61,7 @@ function populateSidebar(categories) {
   });
 }
 
+
 menuBtn.addEventListener("click", () => {
   sidePanel.classList.remove("translate-x-full");
 });
@@ -67,6 +69,7 @@ menuBtn.addEventListener("click", () => {
 closeBtn.addEventListener("click", () => {
   sidePanel.classList.add("translate-x-full");
 });
+
 
 function displayDescription(name, description) {
   meals.innerHTML = `
@@ -110,6 +113,7 @@ async function fetchMealsByCategory(categoryName) {
   }
 }
 
+
 async function fetchMealDetails(mealId) {
   try {
     const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealId}`);
@@ -125,24 +129,33 @@ async function fetchMealDetails(mealId) {
 function displayMealDetails(meal) {
   meals.innerHTML = `
     <div class="rounded-xl mx-10 my-10 p-6">
-      <div class="md:flex-row gap-6  p-7 rounded-lg">
-        <div class="w-full flex justify-center">
-          <img src="${meal.strMealThumb}" alt="${meal.strMeal}" class="rounded-lg w-100 h-100 object-cover left-0" />
+      <div class="md:flex-row gap-6 p-7 rounded-lg bg-white">
+        <div class="flex justify-between flex-col md:flex-row">
+          <div class="w-full md:w-1/3 flex justify-center">
+            <img src="${meal.strMealThumb}" alt="${meal.strMeal}" class="rounded-lg h-full w-full object-cover md:ml-50" />
+          </div>
+          <div class="flex-1 md:ml-100">
+            <h2 class="text-4xl font-bold text-orange-600 mb-2">${meal.strMeal}</h2>
+            <div class="mb-3">
+              <span class="font-semibold">Category:</span> ${meal.strCategory || ""}
+            </div>
+            <div class="mb-3">
+              <span class="font-semibold">Tags:</span> ${(meal.strTags || "").split(",").join(", ")}
+            </div>
+            <div class="mb-4"><a href="${meal.strSource || '#'}" class="text-blue-600 underline" target="_blank">Source Link</a></div>
+            <div class="border w-fit h-auto bg-orange-500 text-white p-3 rounded-md">
+              <h3 class="text-2xl font-bold mb-2">Ingredients</h3>
+              <ul class="grid grid-cols-1 md:grid-cols-2 gap-2">${getIngredientsList(meal)}</ul>
+            </div>
+          </div>
         </div>
-        <div>
-          <h2 class="text-4xl font-bold text-orange-600 mb-2">${meal.strMeal}</h2>
-          <div class="mb-3">
-            <span class="font-semibold">Category:</span> ${meal.strCategory || ""}
-            <span class="ml-4 font-semibold">Area:</span> ${meal.strArea || ""}
-          </div>
-          <div class="mb-3">
-            <span class="font-semibold">Tags:</span> ${(meal.strTags || " ")}
-          </div>
-          <div class="mb-4"><a href="${meal.strSource || '#'}" class="text-blue-600 underline" target="_blank">Source Link</a></div>
-          <h3 class="text-2xl font-bold text-orange-500 mb-2">Ingredients</h3>
-          <ul class="mb-4 grid grid-cols-1 gap-2">${getIngredientsList(meal)}</ul>
+        <h2 class="text-xl mt-20 font-semibold">Measure:</h2>
+        <div class="shadow-md grid grid-cols-1 md:grid-cols-2 mt-5 border rounded-xl">
+          ${getmeasureList(meal)}
+        </div>
+        <div class="block hidden md:block mt-5">
           <h3 class="text-2xl font-bold text-orange-500 mb-2">Instructions</h3>
-          <p class="text-gray-700 whitespace-pre-wrap">${meal.strInstructions}</p>
+          <ol start="1" class="text-gray-700 whitespace-pre-wrap list-decimal pl-5 text-gray-700 space-y-2">${meal.strInstructions}</ol>
         </div>
       </div>
     </div>
@@ -155,8 +168,22 @@ function getIngredientsList(meal) {
     const ing = meal[`strIngredient${i}`];
     const measure = meal[`strMeasure${i}`];
     if (ing && ing.trim()) {
-      ingredients += `<li>🍴 ${ing} <span class="text-gray-500">(${measure || ""})</span></li>`;
+      ingredients += `<li> <span class="border rounded-full m-3 bg-green-500 text-black w-20">${i}</span>${ing}</li>`;
     }
   }
   return ingredients;
 }
+
+function getmeasureList(meal){
+  let ingredients = "";
+  for(let i=1;i<=20;i++)
+  {
+    const ing = meal[`strIngredient${i}`];
+    const measure = meal[`strMeasure${i}`];
+    if (ing && ing.trim()){
+      ingredients += `<ul class="ml-3"><i class="fa-solid fa-spoon text-orange-500"></i><span>${measure || ""}</span></ul>`
+    }
+  }
+  return ingredients;
+}
+

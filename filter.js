@@ -22,6 +22,9 @@
             </div>
           </div>
         `;
+        mealCard.addEventListener("click", () => {
+          fetchMealDetails(meal.idMeal);
+        });
         meals.appendChild(mealCard);
       }
     });
@@ -29,7 +32,7 @@
 
   async function searchMealsByName(foodName) {
     try {
-      const response = await fetch("https://www.themealdb.com/api/json/v1/1/search.php?s=${foodName}");
+      const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${foodName}`);
       const data = await response.json();
       displayMealsList(data.meals);
     } catch (error) {
@@ -39,7 +42,7 @@
 
   async function filterByCategory(category) {
     try {
-      const response = await fetch("https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}");
+      const response = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`);
       const data = await response.json();
       displayMealsList(data.meals);
     } catch (error) {
@@ -49,14 +52,30 @@
 
   searchBtn.addEventListener("click", () => {
     const query = searchIn.value.trim();
-    if (query) searchMealsByName(query);
+    if (query){ 
+      searchMealsByName(query);
+    }
   });
 
   searchIn.addEventListener("keypress", (e) => {
     if (e.key === "Enter") {
       const query = searchIn.value.trim();
-      if (query) searchMealsByName(query);
+      if (query){
+        searchMealsByName(query);
+      }
     }
   });
   window.filterByCategory = filterByCategory;
 })();
+
+async function fetchMealDetails(mealId) {
+  try {
+    const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealId}`);
+    const data = await response.json();
+    if (data.meals && data.meals[0]) {
+      displayMealDetails(data.meals[0]);
+    }
+  } catch (error) {
+    console.error('Error fetching meal details:', error);
+  }
+}
