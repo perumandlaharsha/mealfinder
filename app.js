@@ -163,7 +163,7 @@ function getIngredientsList(meal) {
     const ing = meal[`strIngredient${i}`];
     const measure = meal[`strMeasure${i}`];
     if (ing && ing.trim()) {
-      ingredients += `<li> <span class="border rounded-full m-3 bg-green-500 text-black w-20">${i}</span>${ing}</li>`;
+      ingredients += `<li> <span class="border rounded-full m-7 bg-green-500 text-black w-20" >${i}</span>${ing}</li>`;
     }
   }
   return ingredients;
