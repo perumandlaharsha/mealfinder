@@ -52,7 +52,7 @@
 
   searchBtn.addEventListener("click", () => {
     const query = searchIn.value.trim();
-    if (query){ 
+    if (query) { 
       searchMealsByName(query);
     }
   });
@@ -60,11 +60,12 @@
   searchIn.addEventListener("keypress", (e) => {
     if (e.key === "Enter") {
       const query = searchIn.value.trim();
-      if (query){
+      if (query) {
         searchMealsByName(query);
       }
     }
   });
+
   window.filterByCategory = filterByCategory;
 })();
 

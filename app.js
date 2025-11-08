@@ -1,11 +1,10 @@
 const foodContainer = document.querySelector(".foodContainer");
-const menuBtn = document.getElementById("menuBtn");
-const sidePanel = document.getElementById("sidePanel");
-const closeBtn = document.getElementById("closeBtn");
-const categoryList = document.getElementById("categoryList");
+const menuButton = document.getElementById("menuButton");
+const sideBar = document.getElementById("sideBar");
+const closeButton = document.getElementById("closeButton");
+const categories = document.getElementById("categories");
 const meals = document.getElementById("meals");
 const searchMeals = document.getElementById("searchMeals");
-
 
 async function fetchCategories() {
   try {
@@ -45,36 +44,33 @@ function displayFood(products) {
   });
 }
 
-
-function populateSidebar(categories) {
-  categoryList.innerHTML = "";
-  categories.forEach((cat) => {
+function populateSidebar(categoryData) {
+  categories.innerHTML = "";
+  categoryData.forEach((cat) => {
     const li = document.createElement("li");
     li.textContent = cat.strCategory;
     li.className = "border-b pb-2 cursor-pointer hover:text-orange-500";
     li.addEventListener("click", () => {
       displayDescription(cat.strCategory, cat.strCategoryDescription);
       fetchMealsByCategory(cat.strCategory);
-      sidePanel.classList.add("translate-x-full");
+      sideBar.classList.add("translate-x-full");
     });
-    categoryList.appendChild(li);
+    categories.appendChild(li);
   });
 }
 
-
-menuBtn.addEventListener("click", () => {
-  sidePanel.classList.remove("translate-x-full");
+menuButton.addEventListener("click", () => {
+  sideBar.classList.remove("translate-x-full");
 });
 
-closeBtn.addEventListener("click", () => {
-  sidePanel.classList.add("translate-x-full");
+closeButton.addEventListener("click", () => {
+  sideBar.classList.add("translate-x-full");
 });
-
 
 function displayDescription(name, description) {
   meals.innerHTML = `
     <div class="rounded-xl mx-10 my-10 p-6">
-      <div class = "border p-7 rounded-lg">
+      <div class="border p-7 rounded-lg">
         <h2 class="text-4xl font-bold text-orange-600 mb-4">${name}</h2>
         <p class="text-gray-700 text-justify text-xl">${description}</p>
       </div>
@@ -112,7 +108,6 @@ async function fetchMealsByCategory(categoryName) {
     console.error("Error fetching meals by category:", error);
   }
 }
-
 
 async function fetchMealDetails(mealId) {
   try {
@@ -174,16 +169,14 @@ function getIngredientsList(meal) {
   return ingredients;
 }
 
-function getmeasureList(meal){
+function getmeasureList(meal) {
   let ingredients = "";
-  for(let i=1;i<=20;i++)
-  {
+  for (let i = 1; i <= 20; i++) {
     const ing = meal[`strIngredient${i}`];
     const measure = meal[`strMeasure${i}`];
-    if (ing && ing.trim()){
-      ingredients += `<ul class="ml-3"><i class="fa-solid fa-spoon text-orange-500"></i><span>${measure || ""}</span></ul>`
+    if (ing && ing.trim()) {
+      ingredients += `<ul class="ml-3"><i class="fa-solid fa-spoon text-orange-500"></i><span>${measure || ""}</span></ul>`;
     }
   }
   return ingredients;
 }
-
